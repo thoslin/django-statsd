@@ -89,12 +89,12 @@ def _process_boomerang(request):
 
     keys = {}
     for k in getattr(settings, 'STATSD_RECORD_KEYS', stick_keys):
-        v = int(request.GET.get(boomerang[k]))
+        v = request.GET.get(boomerang[k])
         if not v or v == 'undefined':
             continue
         if k in boomerang:
             process_key(start, k, v)
-            keys[k] = v
+            keys[k] = int(v)
 
     try:
         _process_summaries(start, keys)
