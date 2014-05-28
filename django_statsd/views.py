@@ -38,10 +38,15 @@ types = {
 
 # These are the default keys that we will try and record.
 stick_keys = [
+ 'window.performance.timing.connectEnd',
+ 'window.performance.timing.connectStart',
  'window.performance.timing.domComplete',
  'window.performance.timing.domInteractive',
  'window.performance.timing.domLoading',
+ 'window.performance.timing.domainLookupStart',
+ 'window.performance.timing.domainLookupEnd',
  'window.performance.timing.loadEventEnd',
+ 'window.performance.timing.requestStart',
  'window.performance.timing.responseStart',
  'window.performance.navigation.redirectCount',
  'window.performance.navigation.type',
@@ -69,6 +74,14 @@ def _process_summaries(start, keys):
                keys['window.performance.timing.domLoading'],
         'rendering': keys['window.performance.timing.loadEventEnd'] -
                      keys['window.performance.timing.domComplete'],
+        'connect': keys['window.performance.timing.connectEnd'] -
+                     keys['window.performance.timing.connectStart'],
+        # DNS lookup
+        'dns': keys['window.performance.timing.domainLookupEnd'] -
+                     keys['window.performance.timing.domainLookupStart'],
+        # Time To First Byte
+        'ttfb': keys['window.performance.timing.responseStart'] -
+                     keys['window.performance.timing.connectEnd'],
     }
     for k, v in calculated.items():
         # If loadEventEnd still does not get populated, we could end up with
